@@ -1,0 +1,83 @@
+body 
+{
+	padding-top: 70px;
+}
+
+#plot
+{
+	display: inline-block;
+	position: relative;
+	left: 20px;
+	float: left;
+	border: 1px solid #000;
+	border-radius: 5px;
+	width: 820px;
+	height: 820px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.plot-hidden
+{
+	margin-left: -700px;
+}
+
+.plot-toggle-btn
+{
+	margin-left: 30px;
+	cursor: pointer;
+}
+
+.plot-container
+{
+	margin-right: 30px;
+	display: inline-block;
+}
+
+.hidden
+{
+	diplay: none;
+}
+
+.iter-table
+{
+	//max-height: 300px;
+	//overflow-y: scroll;
+}
+
+.matrix-element
+{
+	padding: 10px;
+	margin-right: 5px;
+	margin-left:  5px;
+	font-size: 16px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+}
+.top-buffer
+{
+	margin-top: 20px;
+}
+
+.formula td {
+	padding: 2px 10px;
+	text-align: center;
+}
+
+.formula
+{
+	font-size: 22px;
+	font-weight: 600;
+}
+
+.formula .form-control
+{
+	display: inline;
+	width: 60px;
+}
+.formula-eps
+{
+	display: inline;
+	width: 100px;
+}

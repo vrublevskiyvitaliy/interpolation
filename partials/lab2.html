@@ -1,0 +1,119 @@
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div>Матрица A:</div>
+                <div data-ng-repeat="row in A" class="row"> 
+                    <span data-ng-repeat="el in row" class="col-md-1 matrix-element">{{el}}</span>
+                </div>
+                <div>Вектор b:</div>
+                <div data-ng-repeat="el in b" class="row"> 
+                    <span class="col-md-1 matrix-element">{{el}}</span>
+                </div>
+                
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12"> 
+                        <h2>Виберіть метод для розв'язання</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form> 
+                            <label>
+                                <input type="radio" ng-model="method" value="sqrt">
+                                Метод квадратного кореня
+                            </label>
+                            <label>
+                                <input type="radio" ng-model="method" value="zeidel">
+                                Метод Зейделя
+                            </label>                       
+                        </form>
+                    </div>
+                </div> 
+                <div class="row" data-ng-show="method == 'zeidel'">
+                    <div class="col-lg-12"> 
+                        <label>
+                             Введіть точність обчислювання {{eps}}
+                                <input type="number" class="form-control" ng-model="eps" ng-pattern="/^\s*(\-|\+)?(\d+|(\d*(\.\d*)))([eE]+[-]?\d+)?\s*$/">
+                               
+                        </label>
+                         <label>
+                            Введіть початкове наближення </br>
+                                <input type="number" class="col-md-1 matrix-element" data-ng-model="x0[0]">
+                                 <input type="number" class="col-md-1 matrix-element" data-ng-model="x0[1]">
+                                  <input type="number" class="col-md-1 matrix-element" data-ng-model="x0[2]">
+                                   <input type="number" class="col-md-1 matrix-element" data-ng-model="x0[3]">
+                        </label>
+                    </div>
+                </div>               
+                <div class="row">
+                    <div class="col-lg-12"> 
+                        <button type="button" class="btn btn-primary" id="calc-btn-mmn" ng-show="method == 'sqrt'" data-ng-click="findAnsSqrt()">Отримати результат методом квадратного кореня</button>
+                        <button type="button" class="btn btn-primary" id="calc-btn-mr" ng-show="method == 'zeidel'" data-ng-click="findAnsZeidel()">Отримати результат методом Зейделя</button>
+                    </div>
+                </div>
+                <div class="row" ng-show="ans.length && method == 'sqrt'">
+                    <div class="col-lg-12"> 
+                        <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Відповідь:</h4>
+                                <span data-ng-repeat="el in ans" class="col-md-2 matrix-element">{{el}}</span>
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Визначник:</h4>
+                                <span class="col-md-2 matrix-element">{{det}}</span>
+                            </div>
+                        </div>
+                        <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Обернена матриця:</h4>
+                                <div class="col-md-10">
+                                    <div data-ng-repeat="row in inv" class="row"> 
+                                        <span data-ng-repeat="el in row" class="col-md-1 matrix-element">{{el}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Число обумовленості:</h4>
+                                <span class="col-md-2 matrix-element">{{cond}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-show="x.length && method == 'zeidel'">
+                    <div class="col-lg-12"> 
+                        <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Відповідь:</h4>
+                                <span data-ng-repeat="el in x" class="col-md-2 matrix-element">{{el}}</span>
+                            </div>
+                        </div>
+                         <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Кількість кроків за формулою:</h4>
+                                <span class="col-md-2 matrix-element">{{tCount}}</span>
+                            </div>
+                        </div>
+                         <div class="row top-buffer">
+                            <div class="col-lg-12"> 
+                                <h4 class="col-md-2">Кількість кроків:</h4>
+                                <span class="col-md-2 matrix-element">{{aCount}}</span>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+
+                
+                
+            </div>
+            
+        </div>
+        <!-- /.row -->
+    </div>
