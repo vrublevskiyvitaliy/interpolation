@@ -18,7 +18,7 @@ function Lab3Controller($scope)
 
 	var funcInv = function(x)
 	{
-		return Math.sqrt(Math.log(x));
+		return Math.sqrt(Math.abs(Math.log(x)));
 	}
 	
 	$scope.process = function()
@@ -51,10 +51,10 @@ function Lab3Controller($scope)
 		var nt = fillXT($scope.xT, $scope.yT, $scope.eps);
 		$scope.func1 = 'f(x) = ' + createFuncLinear(myXR, myYR, $scope.n);
 		$scope.func2 = 'f(x) = ' + createFuncCubic(myXR, myYR, $scope.n);
-		$scope.func3 = 'f(x) = ' + createFuncLinear($scope.xT, $scope.yT,nt);
+		//$scope.func3 = 'f(x) = ' + createFuncLinear($scope.xT, $scope.yT,nt);
 		
-		var finv = math.eval($scope.func3);
-		$scope.xInv = finv($scope.a);
+		//var finv = math.eval($scope.func3);
+		$scope.xInv = calculateFuncLinear($scope.xT, $scope.yT,nt,$scope.a);
 		$scope.nInv = nt;
 		$scope.epsLin = (M2*step*step)/8;
 		$scope.epsCub = (M4*step*step*step*step)/384;
@@ -65,17 +65,19 @@ function Lab3Controller($scope)
 	{
 		var h = Math.sqrt((8 * eps / m2Inverse));
 		$scope.hInv = h;
-		var n = Math.trunc((b-a)/h) + 1;
+		var aa = 1;
+		var bb = 8103;
+		var n = Math.trunc((bb-aa)/h) + 1;
 		var step = h;
-		y.push(a - step);
-		x.push(func(a - step));
+		y.push(aa - step);
+		x.push(func(aa - step));
 		for (var i = 0; i<=n+1; i++)
 		{
-			y.push(a + i*step);
-			x.push(func(a + i*step));
+			y.push(aa + i*step);
+			x.push(func(aa + i*step));
 		}
-		y.push(b + step);
-		x.push(func(b + step));
+		y.push(bb + step);
+		x.push(func(bb + step));
 		
 		return n;
 	}
@@ -108,6 +110,25 @@ function Lab3Controller($scope)
 		}
 		
 		return Linear;
+	}
+	
+	
+	var calculateFuncLinear = function(x, y, n, find)
+	{
+		var sum = 0;
+		for (var i = 1; i<=n+2; i++)
+		{
+			if (find >= x[i-1] && find <= x[i])
+			{
+				sum+=y[i]*((find-x[i-1])/(x[i]-x[i-1]));
+			}
+			if (find >= x[i] && find <= x[i+1])
+			{
+				sum+=y[i]*((x[i+1]-find)/(x[i+1]-x[i]));
+			}
+		}
+		
+		return sum;
 	}
 
 	var createFuncCubic = function(x, y, n)
