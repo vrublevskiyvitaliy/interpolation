@@ -161,9 +161,6 @@ function Lab3Controller($scope)
 		for (var i = 1; i<=n+2; i++)
 		{
 			Cubic += '('+y[i]+ '*'+makeForFirstAdd(x,i)+'+'+funcDer(x[i])+'* '+makeForSecondAdd(x,i)+')';
-			if (i != n+2){
-			Cubic += '+';
-			}
 		}
 		return Cubic;
 	}

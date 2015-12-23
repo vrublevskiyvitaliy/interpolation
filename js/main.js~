@@ -31,9 +31,9 @@ var draw = function(FX1, FX2, FX3, fx)
   			height: 800,
   			grid: true,
 	        data: [
-	       /* {
+	        {
 	          fn: math.eval(FX1),
-	        },*/
+	        },
 	        {
 	          fn: math.eval(FX2),
 	        },/*
