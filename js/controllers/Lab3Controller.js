@@ -4,7 +4,7 @@ angular
 
 function Lab3Controller($scope)
 {
-	var a = 0, b = 3, M2 = 307917, M4 = 14099400;
+	var a = 0, b = 3, M2 = 307917, M4 = 14099400, m2Inverse = 250019;
 	$scope.n;
 	var func = function(x)
 	{
@@ -53,7 +53,6 @@ function Lab3Controller($scope)
 		$scope.func2 = 'f(x) = ' + createFuncCubic(myXR, myYR, $scope.n);
 		$scope.func3 = 'f(x) = ' + createFuncLinear($scope.xT, $scope.yT,nt);
 		
-		//$scope.xInv = L($scope.yT, $scope.xT, $scope.n, $scope.a);
 		var finv = math.eval($scope.func3);
 		$scope.xInv = finv($scope.a);
 		$scope.nInv = nt;
@@ -64,7 +63,7 @@ function Lab3Controller($scope)
 
 	var fillXT = function(x, y, eps)
 	{
-		var h = Math.sqrt((8 * eps / M2));
+		var h = Math.sqrt((8 * eps / m2Inverse));
 		$scope.hInv = h;
 		var n = Math.trunc((b-a)/h) + 1;
 		var step = h;
@@ -80,49 +79,11 @@ function Lab3Controller($scope)
 		
 		return n;
 	}
-
-	
-	
-	var fincInv = function(eps, a, find)
-	{
-		var h = Math.sqrt(eps * (16*a + 1)*(16*a + 1) * (16*a + 1)*(48*a - 1) / (2048*a*a));
-		var x1, x2;
-		for (var i = 0.1; i < find; i += h)
-		{
-			x1 = i; x2 = Math.min(i + h, 1);
-		}
-		var x = [x1, x2];
-		var y = [funcInv(x1), funcInv(x2)];
-		var result = L(x, y, 2, find);
-		return result;
-	}
-
-	var createFunc = function(x, y, n)
-	{
-		var w = [];
-		for (var i = 0; i<n; i++)
-		{
-			w.push('(x ' + (x[i] > 0 ? '-' + x[i] : '+' + (-x[i])) + ')');
-		}
-		var Ln = '';
-		for (var i = 0; i<n; i++)
-		{
-			if(Ln != '')
-				Ln += '+';
-			Ln += '(';
-			Ln += y[i] + '*';
-			Ln += w.join('*') + '/';
-			Ln += '((x ' + (x[i] > 0 ? '-' + x[i] : '+' + (-x[i])) + ') * (' + calcWd(x, i, n) + '))';
-			Ln += ')'; 
-		}
-		return Ln;
-	}
 	
 	var makeIndicatorForDot = function(a)
 	{
 		return '((sign(abs(x-'+a+'))+1)mod 2)';
 	}
-	
 	
 	var makeIndicatorForClosedInterval = function(a,b)
 	{
@@ -133,7 +94,6 @@ function Lab3Controller($scope)
 	{
 		return '('+makeIndicatorForClosedInterval(a,b)+'-'+makeIndicatorForDot(a)+'-'+makeIndicatorForDot(b)+')';
 	}
-	
 	
 	var createFuncLinear = function(x, y, n)
 	{
@@ -183,41 +143,6 @@ function Lab3Controller($scope)
 		var firstCase = makeIndicatorForClosedInterval(x[i-1],x[i])+'*'+hi+'*'+s+'*('+s+'+1)*('+s+'+1)';
 		var secondCase = makeIndicatorForClosedInterval(x[i],x[i+1])+'*'+hi1+'*'+s+'*('+s+'-1)*('+s+'-1)';
 		return '('+firstCase+'+'+secondCase+')';
-	}
-
-	var L = function(x, y, n, x0)
-	{
-		var result = 0;
-		for (var i = 0; i<n; i++)
-		{
-			result += y[i] * calcW(x, x0, n, i) / calcWd(x, i, n);
-		}
-		return result;
-	}
-	var calcW = function(x, x0, n, k)
-	{
-		var result = 1;
-		for (var i = 0; i<n; i++)
-		{
-			if(i == k)
-			{
-				continue;
-			}
-			result *= (x0 - x[i]);
-		}
-		return result;
-	}
-
-	var calcWd = function(x, k, n)
-	{
-		var mult = 1;
-		for (var j = 0; j<n; j++)
-		{
-			if(j == k)
-				continue;
-			mult *= (x[k] - x[j]);
-		}
-		return mult;
 	}
 
 }

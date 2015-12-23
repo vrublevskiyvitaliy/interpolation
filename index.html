@@ -87,14 +87,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" ng-show="invalid_inputB">
-                    <div class="col-lg-12"> 
-
-                        <div class="alert alert-danger"> 
-                           Введіть значення b
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-lg-12"> 
 
@@ -135,22 +127,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" ng-show="invalid_inputA">
-                    <div class="col-lg-12"> 
-
-                        <div class="alert alert-danger"> 
-                           Введіть a
-                        </div>
-                    </div>
-                </div>
-                <div class="row" ng-show="invalid_inputEps">
-                    <div class="col-lg-12"> 
-
-                        <div class="alert alert-danger"> 
-                           Введіть eps
-                        </div>
-                    </div>
-                </div>
                 <div class="row" ng-show="processed">
                     <div class="col-lg-12"> 
                         <div class="panel panel-primary">
@@ -176,7 +152,7 @@
                     <div class="col-lg-12"> 
 
                         <div class="alert alert-warning"> 
-                           Точність лінійного сплайну = {{c | number: 5}}
+                           Точність лінійного сплайну = {{epsLin | number: 5}}
                         </div>
 						<div class="alert alert-warning"> 
                            Точність кубічного сплайну = {{epsCub | number: 5}}
