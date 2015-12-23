@@ -4,7 +4,7 @@ angular
 
 function Lab3Controller($scope)
 {
-	var a = 0, b = 3;
+	var a = 0, b = 3, M2 = 307917, M4 = 14099400;
 	$scope.n;
 	var func = function(x)
 	{
@@ -15,39 +15,19 @@ function Lab3Controller($scope)
 	{
 		return 2*x*Math.exp(x*x);
 	}
-/*
+
 	var funcInv = function(x)
 	{
-		return Math.sqrt((1 - x)/ ($scope.b * x));
+		return Math.sqrt(Math.log(x));
 	}
-	*/
+	
 	$scope.process = function()
 	{
-		/*if($scope.b == undefined)
-		{
-			$scope.invalid_inputB = true;
-			return;
-		}*/
-		$scope.invalid_inputB = false;
 		if($scope.n == undefined || $scope.n <= 0)
 		{
 			$scope.invalid_input = true;
 			return;
 		}
-		$scope.invalid_input = false;
-		/*if($scope.eps == undefined)
-		{
-			$scope.invalid_inputEps = true;
-			return;
-		}*/
-		$scope.invalid_inputEps = false;
-		/*
-		if($scope.a == undefined)
-		{
-			$scope.invalid_inputA = true;
-			return;
-		}*/
-		$scope.invalid_inputA = false;
 		$scope.xR = [];
 		$scope.yR = [];
 		$scope.xT = [];
@@ -68,26 +48,41 @@ function Lab3Controller($scope)
 		myXR.push(b + step);
 		myYR.push(func(b + step));
 		
-
-		//fillXT($scope.xT, $scope.yT, $scope.n);
+		var nt = fillXT($scope.xT, $scope.yT, $scope.eps);
 		$scope.func1 = 'f(x) = ' + createFuncLinear(myXR, myYR, $scope.n);
 		$scope.func2 = 'f(x) = ' + createFuncCubic(myXR, myYR, $scope.n);
-		//$scope.func3 = 'f(x) = ' + createFunc($scope.yT, $scope.xT, $scope.n);
+		$scope.func3 = 'f(x) = ' + createFuncLinear($scope.xT, $scope.yT,nt);
+		
 		//$scope.xInv = L($scope.yT, $scope.xT, $scope.n, $scope.a);
-		//$scope.xInv = fincInv($scope.eps, $scope.b, $scope.a);
+		var finv = math.eval($scope.func3);
+		$scope.xInv = finv($scope.a);
+		$scope.nInv = nt;
+		$scope.epsLin = (M2*step*step)/8;
+		$scope.epsCub = (M4*step*step*step*step)/384;
 		$scope.processed = true;
 	}
 
-	var fillXT = function(x, y, n)
+	var fillXT = function(x, y, eps)
 	{
-		for (var i = 0; i<n; i++)
+		var h = Math.sqrt((8 * eps / M2));
+		$scope.hInv = h;
+		var n = Math.trunc((b-a)/h) + 1;
+		var step = h;
+		y.push(a - step);
+		x.push(func(a - step));
+		for (var i = 0; i<=n+1; i++)
 		{
-			var t = Math.cos(((2*i + 1) * Math.PI)/ (2*n + 1));
-			x.push((a + b) / 2 - (b - a) * t / 2);
-			y.push(func(x[i]));
+			y.push(a + i*step);
+			x.push(func(a + i*step));
 		}
+		y.push(b + step);
+		x.push(func(b + step));
+		
+		return n;
 	}
 
+	
+	
 	var fincInv = function(eps, a, find)
 	{
 		var h = Math.sqrt(eps * (16*a + 1)*(16*a + 1) * (16*a + 1)*(48*a - 1) / (2048*a*a));

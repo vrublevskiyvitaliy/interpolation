@@ -39,7 +39,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="active">
-                        <a href="#">Лабораторна №1</a>
+                        <a href="#">Лабораторна №4</a>
                     </li>
                 
                 </ul>
@@ -80,11 +80,7 @@
                             <div class="panel-body">
                                 <table class="formula">
                                     <tr>
-                                        <td rowspan="2">f(x) = </td>
-                                        <td style="border-bottom: 1px solid;">1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1 + <input type="number" class="form-control" ng-model="b" placeholder="b" id="b">x<sup>2</sup></td>
+                                        <td rowspan="2">f(x) = e<sup>x<sup>2</sup></sup></td>
                                     </tr>
                                 </table>
                             </div>
@@ -103,7 +99,7 @@
                     <div class="col-lg-12"> 
 
                         <div class="form-group"> 
-                            <label for="n-input">Кількість вузлів n для полінома Лагранжа:</label>
+                            <label for="n-input">Кількість вузлів n :</label>
                             <input type="number" class="form-control" placeholder="Введіть значення n" id="n-input" ng-model="n"/>
                         </div>
                     </div>
@@ -130,6 +126,12 @@
 
                         <div class="alert alert-warning"> 
                            x = {{xInv | number: 5}}
+                        </div>
+						<div class="alert alert-warning"> 
+                           n = {{nInv | number: 5}}
+                        </div>
+						<div class="alert alert-warning"> 
+                           h = {{hInv | number: 5}}
                         </div>
                     </div>
                 </div>
@@ -170,29 +172,19 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" ng-show="processed">
+					<div class="row" ng-show="processed">
                     <div class="col-lg-12"> 
-                        <div class="panel  panel-danger">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Вузли - корені полінома Чебишева:</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table">
-                                    <tr>
-                                        <th>x<sub>i</sub></th>
-                                        <td data-ng-repeat="x in xT">{{x | number: 3}}</td>
-                                    </tr>
-                                     <tr>
-                                        <th>y<sub>i</sub></th>
-                                        <td data-ng-repeat="y in yT">{{y | number: 3}}</td>
-                                    </tr>
 
-                                </table>
-                            </div>
+                        <div class="alert alert-warning"> 
+                           Точність лінійного сплайну = {{c | number: 5}}
+                        </div>
+						<div class="alert alert-warning"> 
+                           Точність кубічного сплайну = {{epsCub | number: 5}}
                         </div>
                     </div>
                 </div>
+                </div>
+
                 <input type="text" class="form-control hidden" id="func1"  ng-model="func1"/>
                 <input type="text" class="form-control hidden" id="func2"  ng-model="func2"/>
                 <input type="text" class="form-control hidden" id="func3"  ng-model="func3"/>
@@ -201,9 +193,6 @@
                         <button type="button" class="btn btn-primary" ng-click="process()" id="btn-calc">Розрахувати</button>
                     </div>
                 </div>
-
-                
-                
             </div>
             
         </div>
