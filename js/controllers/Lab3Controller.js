@@ -10,6 +10,11 @@ function Lab3Controller($scope)
 	{
 		return Math.exp(x*x);
 	}
+
+	var funcDer = function(x)
+	{
+		return 2*x*Math.exp(x*x);
+	}
 /*
 	var funcInv = function(x)
 	{
@@ -141,6 +146,38 @@ function Lab3Controller($scope)
 			Linear += makeIndicatorForOpenInterval(x[n-2],x[n-1])+'*((x-'+x[n-2]+')/('+x[n-1]+'-'+x[n-2]+'))*'+y[n-1];	
 		}
 		return Linear;
+	}
+
+	var createFuncCubic = function(x, y, n)
+	{
+		var Cubic = '';
+		for (var i = 1; i<=n+2; i++)
+		{
+			Cubic += '(y[i] * '+makeForFirstAdd(x,i)+'+'+funcDer(x[i])+'* '+makeForSecondAdd(x,i)+')';
+		}
+		return Linear;
+	}
+
+	var makeForFirstAdd = function(x, i)
+	{
+		var hi = x[i]-x[i-1];
+		var hi1 = x[i+1]-x[i];
+		var s = '((x-'+x[i]+')/'+hi+')';
+		var s1 = '((x-'+x[i]+')/'+hi1+')';
+		var firstCase = makeIndicatorForClosedInterval(x[i-1],x[i])+'*(-2*'+s+'*'+s+'*'+s+'-3*'+s+'*'+s+'+1'+')';
+		var secondCase = makeIndicatorForClosedInterval(x[i],x[i+1])+'*(2*'+s+'*'+s+'*'+s+'-3*'+s+'*'+s+'+1'+')';
+		return '('+firstCase+'+'+secondCase+')';
+	}
+
+	var makeForSecondAdd = function(x, i)
+	{
+		var hi = x[i]-x[i-1];
+		var hi1 = x[i+1]-x[i];
+		var s = '((x-'+x[i]+')/'+hi+')';
+		var s1 = '((x-'+x[i]+')/'+hi1+')';
+		var firstCase = makeIndicatorForClosedInterval(x[i-1],x[i])+'*'+hi+'*'+s+'*('+s+'+1)*('+s+'+1)';
+		var secondCase = makeIndicatorForClosedInterval(x[i],x[i+1])+'*'+hi1+'*'+s+'*('+s+'-1)*('+s+'-1)';
+		return '('+firstCase+'+'+secondCase+')';
 	}
 
 	var L = function(x, y, n, x0)
