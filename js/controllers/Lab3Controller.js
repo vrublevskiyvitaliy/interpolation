@@ -65,7 +65,7 @@ function Lab3Controller($scope)
 	{
 		var h = Math.sqrt((8 * eps / m2Inverse));
 		$scope.hInv = h;
-		var aa = 1;
+		var aa = 2;
 		var bb = 8103;
 		var n = Math.trunc((bb-aa)/h) + 1;
 		var step = h;
