@@ -4,7 +4,7 @@ angular
 
 function Lab3Controller($scope)
 {
-	var a = 0, b = 3, M2 = 307917, M4 = 14099400, m2Inverse = 250019;
+	var a = 0, b = 3, M2 = 307917, M4 = 14099400, m2Inverse = 0.07712;
 	$scope.n;
 	var func = function(x)
 	{
@@ -65,19 +65,19 @@ function Lab3Controller($scope)
 	{
 		var h = Math.sqrt((8 * eps / m2Inverse));
 		$scope.hInv = h;
-		var aa = 2;
+		var aa = 3;
 		var bb = 8103;
 		var n = Math.trunc((bb-aa)/h) + 1;
 		var step = h;
-		y.push(aa - step);
-		x.push(func(aa - step));
+		y.push(funcInv(aa - step));
+		x.push(aa - step);
 		for (var i = 0; i<=n+1; i++)
 		{
-			y.push(aa + i*step);
-			x.push(func(aa + i*step));
+			y.push(funcInv(aa + i*step));
+			x.push(aa + i*step);
 		}
-		y.push(bb + step);
-		x.push(func(bb + step));
+		y.push(funcInv(bb + step));
+		x.push(bb + step);
 		
 		return n;
 	}

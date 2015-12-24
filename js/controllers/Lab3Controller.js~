@@ -4,7 +4,7 @@ angular
 
 function Lab3Controller($scope)
 {
-	var a = 0, b = 3;
+	var a = 0, b = 3, M2 = 307917, M4 = 14099400, m2Inverse = 0.07712;
 	$scope.n;
 	var func = function(x)
 	{
@@ -15,39 +15,19 @@ function Lab3Controller($scope)
 	{
 		return 2*x*Math.exp(x*x);
 	}
-/*
+
 	var funcInv = function(x)
 	{
-		return Math.sqrt((1 - x)/ ($scope.b * x));
+		return Math.sqrt(Math.abs(Math.log(x)));
 	}
-	*/
+	
 	$scope.process = function()
 	{
-		/*if($scope.b == undefined)
-		{
-			$scope.invalid_inputB = true;
-			return;
-		}*/
-		$scope.invalid_inputB = false;
 		if($scope.n == undefined || $scope.n <= 0)
 		{
 			$scope.invalid_input = true;
 			return;
 		}
-		$scope.invalid_input = false;
-		/*if($scope.eps == undefined)
-		{
-			$scope.invalid_inputEps = true;
-			return;
-		}*/
-		$scope.invalid_inputEps = false;
-		/*
-		if($scope.a == undefined)
-		{
-			$scope.invalid_inputA = true;
-			return;
-		}*/
-		$scope.invalid_inputA = false;
 		$scope.xR = [];
 		$scope.yR = [];
 		$scope.xT = [];
@@ -68,66 +48,44 @@ function Lab3Controller($scope)
 		myXR.push(b + step);
 		myYR.push(func(b + step));
 		
-
-		//fillXT($scope.xT, $scope.yT, $scope.n);
+		var nt = fillXT($scope.xT, $scope.yT, $scope.eps);
 		$scope.func1 = 'f(x) = ' + createFuncLinear(myXR, myYR, $scope.n);
 		$scope.func2 = 'f(x) = ' + createFuncCubic(myXR, myYR, $scope.n);
-		//$scope.func3 = 'f(x) = ' + createFunc($scope.yT, $scope.xT, $scope.n);
-		//$scope.xInv = L($scope.yT, $scope.xT, $scope.n, $scope.a);
-		//$scope.xInv = fincInv($scope.eps, $scope.b, $scope.a);
+		//$scope.func3 = 'f(x) = ' + createFuncLinear($scope.xT, $scope.yT,nt);
+		
+		//var finv = math.eval($scope.func3);
+		$scope.xInv = calculateFuncLinear($scope.xT, $scope.yT,nt,$scope.a);
+		$scope.nInv = nt;
+		$scope.epsLin = (M2*step*step)/8;
+		$scope.epsCub = (M4*step*step*step*step)/384;
 		$scope.processed = true;
 	}
 
-	var fillXT = function(x, y, n)
+	var fillXT = function(x, y, eps)
 	{
-		for (var i = 0; i<n; i++)
+		var h = Math.sqrt((8 * eps / m2Inverse));
+		$scope.hInv = h;
+		var aa = 3;
+		var bb = 8103;
+		var n = Math.trunc((bb-aa)/h) + 1;
+		var step = h;
+		y.push(aa - step);
+		x.push(func(aa - step));
+		for (var i = 0; i<=n+1; i++)
 		{
-			var t = Math.cos(((2*i + 1) * Math.PI)/ (2*n + 1));
-			x.push((a + b) / 2 - (b - a) * t / 2);
-			y.push(func(x[i]));
+			y.push(aa + i*step);
+			x.push(func(aa + i*step));
 		}
-	}
-
-	var fincInv = function(eps, a, find)
-	{
-		var h = Math.sqrt(eps * (16*a + 1)*(16*a + 1) * (16*a + 1)*(48*a - 1) / (2048*a*a));
-		var x1, x2;
-		for (var i = 0.1; i < find; i += h)
-		{
-			x1 = i; x2 = Math.min(i + h, 1);
-		}
-		var x = [x1, x2];
-		var y = [funcInv(x1), funcInv(x2)];
-		var result = L(x, y, 2, find);
-		return result;
-	}
-
-	var createFunc = function(x, y, n)
-	{
-		var w = [];
-		for (var i = 0; i<n; i++)
-		{
-			w.push('(x ' + (x[i] > 0 ? '-' + x[i] : '+' + (-x[i])) + ')');
-		}
-		var Ln = '';
-		for (var i = 0; i<n; i++)
-		{
-			if(Ln != '')
-				Ln += '+';
-			Ln += '(';
-			Ln += y[i] + '*';
-			Ln += w.join('*') + '/';
-			Ln += '((x ' + (x[i] > 0 ? '-' + x[i] : '+' + (-x[i])) + ') * (' + calcWd(x, i, n) + '))';
-			Ln += ')'; 
-		}
-		return Ln;
+		y.push(bb + step);
+		x.push(func(bb + step));
+		
+		return n;
 	}
 	
 	var makeIndicatorForDot = function(a)
 	{
 		return '((sign(abs(x-'+a+'))+1)mod 2)';
 	}
-	
 	
 	var makeIndicatorForClosedInterval = function(a,b)
 	{
@@ -138,7 +96,6 @@ function Lab3Controller($scope)
 	{
 		return '('+makeIndicatorForClosedInterval(a,b)+'-'+makeIndicatorForDot(a)+'-'+makeIndicatorForDot(b)+')';
 	}
-	
 	
 	var createFuncLinear = function(x, y, n)
 	{
@@ -154,6 +111,25 @@ function Lab3Controller($scope)
 		
 		return Linear;
 	}
+	
+	
+	var calculateFuncLinear = function(x, y, n, find)
+	{
+		var sum = 0;
+		for (var i = 1; i<=n+2; i++)
+		{
+			if (find >= x[i-1] && find <= x[i])
+			{
+				sum+=y[i]*((find-x[i-1])/(x[i]-x[i-1]));
+			}
+			if (find >= x[i] && find <= x[i+1])
+			{
+				sum+=y[i]*((x[i+1]-find)/(x[i+1]-x[i]));
+			}
+		}
+		
+		return sum;
+	}
 
 	var createFuncCubic = function(x, y, n)
 	{
@@ -161,6 +137,9 @@ function Lab3Controller($scope)
 		for (var i = 1; i<=n+2; i++)
 		{
 			Cubic += '('+y[i]+ '*'+makeForFirstAdd(x,i)+'+'+funcDer(x[i])+'* '+makeForSecondAdd(x,i)+')';
+			if (i != n+2){
+			Cubic += '+';
+			}
 		}
 		return Cubic;
 	}
@@ -185,41 +164,6 @@ function Lab3Controller($scope)
 		var firstCase = makeIndicatorForClosedInterval(x[i-1],x[i])+'*'+hi+'*'+s+'*('+s+'+1)*('+s+'+1)';
 		var secondCase = makeIndicatorForClosedInterval(x[i],x[i+1])+'*'+hi1+'*'+s+'*('+s+'-1)*('+s+'-1)';
 		return '('+firstCase+'+'+secondCase+')';
-	}
-
-	var L = function(x, y, n, x0)
-	{
-		var result = 0;
-		for (var i = 0; i<n; i++)
-		{
-			result += y[i] * calcW(x, x0, n, i) / calcWd(x, i, n);
-		}
-		return result;
-	}
-	var calcW = function(x, x0, n, k)
-	{
-		var result = 1;
-		for (var i = 0; i<n; i++)
-		{
-			if(i == k)
-			{
-				continue;
-			}
-			result *= (x0 - x[i]);
-		}
-		return result;
-	}
-
-	var calcWd = function(x, k, n)
-	{
-		var mult = 1;
-		for (var j = 0; j<n; j++)
-		{
-			if(j == k)
-				continue;
-			mult *= (x[k] - x[j]);
-		}
-		return mult;
 	}
 
 }
